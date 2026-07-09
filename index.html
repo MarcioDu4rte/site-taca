@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LUMINA - Curso de Pintura em Taças</title>
+    <meta name="description" content="Transforme taças simples em obras de arte. Aprenda o passo a passo completo da Pintura Lumina com Édina Coser. Ideal para iniciantes!">
+    
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://pinturatacas.edinacoser.com.br/">
+    <meta property="og:title" content="LUMINA - Curso de Pintura em Taças">
+    <meta property="og:description" content="Aprenda a transformar vidro em arte! Técnica delicada para iniciantes. Crie peças exclusivas e elegantes.">
+    <meta property="og:image" content="https://pinturatacas.edinacoser.com.br/assets/img/foto-autora.jpeg">
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": "LUMINA - Curso de Pintura em Taças",
+      "image": [
+        "https://pinturatacas.edinacoser.com.br/assets/img/foto-autora.jpeg"
+       ],
+      "description": "Curso online que ensina a técnica de pintura em taças. Ideal para iniciantes, permite transformar taças de vidro em peças personalizadas e elegantes.",
+      "brand": {
+        "@type": "Person",
+        "name": "Édina Coser"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": "https://pinturatacas.edinacoser.com.br/",
+        "priceCurrency": "BRL",
+        "price": "497.00",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Rubik+Dirt&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-pink': '#D53369', 
+                        'brand-dark-pink': '#8A2E54',
+                        'brand-soft-pink': '#FF91B1',
+                        'brand-accent': '#FF8DA1',
+                        'brand-text': '#333333',
+                        'brand-light-bg': '#FFF5F8',
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        dirt: ['"Rubik Dirt"', 'cursive'],
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "linear-gradient(to right, #ffffff, #fff1f2)", 
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #333;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .text-glow {
+            text-shadow: 0 0 10px rgba(213, 51, 105, 0.4);
+        }
+        
+        #hero-canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .dynamic-line {
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            opacity: 0.4;
+            filter: blur(2px);
+            transition: opacity 2s ease-out;
+        }
+        
+        .fading-out {
+            opacity: 0 !important;
+        }
+    </style>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- HERO SECTION -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#D53369] pt-20 pb-20">
+        
+        <!-- Dynamic JS Canvas -->
+        <svg id="hero-canvas" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice"></svg>
+
+        <script>
+            (function() {
+                const svg = document.getElementById('hero-canvas');
+                const colors = ['#FFFFFF', '#FF91B1', '#8A2E54', '#FF8DA1'];
+                
+                function createRandomCurve() {
+                    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                    
+                    const startX = Math.random() < 0.5 ? -100 : 1540;
+                    const startY = Math.random() * 900;
+                    const endX = startX === -100 ? 1540 : -100;
+                    const endY = Math.random() * 900;
+                    
+                    const cp1x = Math.random() * 1440;
+                    const cp1y = Math.random() * 900;
+                    const cp2x = Math.random() * 1440;
+                    const cp2y = Math.random() * 900;
+
+                    const d = `M${startX},${startY} C${cp1x},${cp1y} ${cp2x},${cp2y} ${endX},${endY}`;
+                    path.setAttribute("d", d);
+                    
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    path.setAttribute("stroke", color);
+                    path.setAttribute("stroke-width", Math.random() * 3 + 1.5);
+                    path.classList.add("dynamic-line");
+                    
+                    svg.appendChild(path);
+
+                    const length = path.getTotalLength();
+                    const speed = 360; 
+                    const duration = length / speed;
+
+                    path.style.strokeDasharray = length;
+                    path.style.strokeDashoffset = length;
+                    
+                    requestAnimationFrame(() => {
+                        path.style.transition = `stroke-dashoffset ${duration}s linear, opacity 2s ease-out`;
+                        path.style.strokeDashoffset = '0';
+                    });
+
+                    const visibilityTime = 3000; 
+                    setTimeout(() => {
+                        path.classList.add('fading-out');
+                        setTimeout(() => {
+                            if(path.parentNode) path.parentNode.removeChild(path);
+                        }, 2000); 
+                    }, (duration * 1000) + visibilityTime);
+                }
+
+                setInterval(createRandomCurve, 2500); 
+                setTimeout(createRandomCurve, 500);
+            })();
+        </script>
+
+        <!-- Background Elements -->
+        <div class="absolute inset-0 z-0 opacity-40">
+             <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-accent rounded-full blur-[150px] opacity-20"></div>
+             <div class="absolute bottom-0 left-0 w-96 h-96 bg-brand-soft-pink rounded-full blur-[120px] opacity-30"></div>
+             <div class="absolute bottom-0 right-0 w-full h-1/2 bg-gradient-to-t from-brand-pink to-transparent"></div>
+        </div>
+
+        <div class="container mx-auto px-6 z-10 grid md:grid-cols-2 gap-12 items-center">
+            <!-- Image Side (Left) -->
+            <div class="relative flex justify-center order-2 md:order-1">
+                <div class="relative z-10 w-full max-w-lg transform hover:scale-105 transition duration-500">
+                    <img src="./banner.webp" alt="Édina Coser - Lumina Taças" class="w-full drop-shadow-[0_20px_50px_rgba(0,0,0,0.5)] rounded-2xl">
+                </div>
+            </div>
+
+            <!-- Text Side (Right) -->
+            <div class="text-left space-y-8 order-1 md:order-2">
+                <div class="space-y-2">
+                    <h2 class="font-dirt text-brand-soft-pink text-3xl md:text-4xl tracking-widest uppercase mb-2">
+                        LUMINA
+                    </h2>
+                    <h1 class="text-3xl md:text-6xl font-black text-white uppercase leading-tight drop-shadow-sm">
+                        Curso de <br>
+                        Pintura em Taças
+                    </h1>
+                    <p class="text-white/80 text-lg md:text-xl font-medium pt-4">
+                        by Édina Coser
+                    </p>
+                </div>
+                
+                <p class="text-white/90 text-lg leading-relaxed max-w-lg">
+                    Transforme taças de vidro em arte. Aprenda a técnica exclusiva da Pintura Lumina e crie peças extraordinárias, mesmo sem saber desenhar.
+                </p>
+
+                <div class="pt-8">
+                    <a href="https://pay.hotmart.com/T104560088A" class="inline-block bg-white text-brand-pink font-black text-lg md:text-xl py-5 px-10 rounded-full hover:bg-brand-soft-pink hover:text-white hover:scale-105 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.4)] uppercase tracking-widest w-full md:w-auto text-center">
+                        QUERO COMEÇAR AGORA!
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALLERY CAROUSEL SECTION -->
+    <section class="h-screen max-h-[750px] bg-brand-light-bg overflow-hidden flex flex-col justify-center">
+        <div class="container mx-auto px-6 w-full">
+            <div class="text-center mb-3">
+                <h2 class="text-lg md:text-xl font-bold text-brand-text uppercase">VEJA O QUE VOCÊ VAI CRIAR</h2>
+            </div>
+
+            <div class="relative max-w-2xl mx-auto">
+                <div id="carousel-track" class="flex gap-2 transition-transform duration-700 ease-in-out">
+                    <div class="min-w-[85%] md:min-w-[32%] h-[40vh] max-h-[350px] rounded-lg overflow-hidden shadow-md flex-shrink-0">
+                        <img src="./imagem1.webp" alt="Taça pintada 1" class="w-full h-full object-cover hover:scale-105 transition duration-700">
+                    </div>
+                    <div class="min-w-[85%] md:min-w-[32%] h-[40vh] max-h-[350px] rounded-lg overflow-hidden shadow-md flex-shrink-0">
+                        <img src="./imagem2.webp" alt="Taça pintada 2" class="w-full h-full object-cover hover:scale-105 transition duration-700">
+                    </div>
+                    <div class="min-w-[85%] md:min-w-[32%] h-[40vh] max-h-[350px] rounded-lg overflow-hidden shadow-md flex-shrink-0">
+                        <img src="./imagem3.webp" alt="Taça pintada 3" class="w-full h-full object-cover hover:scale-105 transition duration-700">
+                    </div>
+                    <div class="min-w-[85%] md:min-w-[32%] h-[40vh] max-h-[350px] rounded-lg overflow-hidden shadow-md flex-shrink-0">
+                        <img src="./imagem4.webp" alt="Taça pintada 4" class="w-full h-full object-cover hover:scale-105 transition duration-700">
+                    </div>
+                    <div class="min-w-[85%] md:min-w-[32%] h-[40vh] max-h-[350px] rounded-lg overflow-hidden shadow-md flex-shrink-0">
+                        <img src="./imagem5.webp" alt="Taça pintada 5" class="w-full h-full object-cover hover:scale-105 transition duration-700">
+                    </div>
+                    <div class="min-w-[85%] md:min-w-[32%] h-[40vh] max-h-[350px] rounded-lg overflow-hidden shadow-md flex-shrink-0">
+                        <img src="./imagem6.webp" alt="Taça pintada 6" class="w-full h-full object-cover hover:scale-105 transition duration-700">
+                    </div>
+                    <div class="min-w-[85%] md:min-w-[32%] h-[40vh] max-h-[350px] rounded-lg overflow-hidden shadow-md flex-shrink-0">
+                        <img src="./imagem7.webp" alt="Taça pintada 7" class="w-full h-full object-cover hover:scale-105 transition duration-700">
+                    </div>
+                    <div class="min-w-[85%] md:min-w-[32%] h-[40vh] max-h-[350px] rounded-lg overflow-hidden shadow-md flex-shrink-0">
+                        <img src="./imagem8.webp" alt="Taça pintada 8" class="w-full h-full object-cover hover:scale-105 transition duration-700">
+                    </div>
+                    <div class="min-w-[85%] md:min-w-[32%] h-[40vh] max-h-[350px] rounded-lg overflow-hidden shadow-md flex-shrink-0">
+                        <img src="./imagem9.webp" alt="Taça pintada 9" class="w-full h-full object-cover hover:scale-105 transition duration-700">
+                    </div>
+                    <div class="min-w-[85%] md:min-w-[32%] h-[40vh] max-h-[350px] rounded-lg overflow-hidden shadow-md flex-shrink-0">
+                        <img src="./imagem10.webp" alt="Taça pintada 10" class="w-full h-full object-cover hover:scale-105 transition duration-700">
+                    </div>
+                </div>
+
+                <button id="carousel-prev" class="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white/90 shadow flex items-center justify-center text-brand-pink hover:bg-white hover:scale-110 transition-all duration-300">
+                    <i class="fas fa-chevron-left text-xs"></i>
+                </button>
+                <button id="carousel-next" class="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-white/90 shadow flex items-center justify-center text-brand-pink hover:bg-white hover:scale-110 transition-all duration-300">
+                    <i class="fas fa-chevron-right text-xs"></i>
+                </button>
+            </div>
+
+            <div id="carousel-dots" class="flex justify-center gap-2 mt-3"></div>
+            <div class="text-center mt-3">
+                <a href="https://pay.hotmart.com/T104560088A" class="inline-block bg-brand-pink text-white font-black py-3 px-6 md:py-4 md:px-8 text-sm md:text-base rounded-full hover:scale-105 hover:bg-brand-dark-pink hover:shadow-xl transition-all duration-300 uppercase tracking-wider shadow-md">
+                    QUERO COMEÇAR A CRIAR AGORA
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        (function() {
+            const track = document.getElementById('carousel-track');
+            const prevBtn = document.getElementById('carousel-prev');
+            const nextBtn = document.getElementById('carousel-next');
+            const dotsContainer = document.getElementById('carousel-dots');
+            const items = track.children;
+            const total = items.length;
+            let current = 0;
+            let autoPlay;
+
+            const isMobile = () => window.innerWidth < 768;
+            const itemsPerView = () => isMobile() ? 1 : 3;
+            const totalSlides = () => Math.ceil(total / itemsPerView());
+
+            function buildDots() {
+                dotsContainer.innerHTML = '';
+                for (let i = 0; i < totalSlides(); i++) {
+                    const dot = document.createElement('button');
+                    dot.className = 'w-2 h-2 rounded-full bg-brand-pink/30 hover:bg-brand-pink/60 transition-all duration-300';
+                    dot.dataset.index = i;
+                    dot.addEventListener('click', () => goTo(i));
+                    dotsContainer.appendChild(dot);
+                }
+                updateDots();
+            }
+
+            function updateDots() {
+                const dots = dotsContainer.children;
+                for (let i = 0; i < dots.length; i++) {
+                    dots[i].className = i === current
+                        ? 'w-6 h-2 rounded-full bg-brand-pink transition-all duration-300'
+                        : 'w-2 h-2 rounded-full bg-brand-pink/30 hover:bg-brand-pink/60 transition-all duration-300';
+                }
+            }
+
+            function getOffset() {
+                const gap = 8; // gap-2 is 8px
+                const itemWidth = items[0].getBoundingClientRect().width + gap;
+                return -(current * itemWidth * itemsPerView());
+            }
+
+            function goTo(index) {
+                current = Math.max(0, Math.min(index, totalSlides() - 1));
+                track.style.transform = `translateX(${getOffset()}px)`;
+                updateDots();
+                resetAutoPlay();
+            }
+
+            function goNext() {
+                goTo(current + 1 >= totalSlides() ? 0 : current + 1);
+            }
+
+            function goPrev() {
+                goTo(current - 1 < 0 ? totalSlides() - 1 : current - 1);
+            }
+
+            function resetAutoPlay() {
+                clearInterval(autoPlay);
+                autoPlay = setInterval(goNext, 3500);
+            }
+
+            prevBtn.addEventListener('click', goPrev);
+            nextBtn.addEventListener('click', goNext);
+
+            window.addEventListener('resize', () => {
+                track.style.transform = `translateX(${getOffset()}px)`;
+                buildDots();
+            });
+
+            buildDots();
+            resetAutoPlay();
+        })();
+    </script>
+
+    <!-- VIDEO PITCH SECTION -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-10">
+                    <h2 class="text-2xl md:text-3xl font-bold text-brand-text uppercase mb-2">Assista ao vídeo e veja a transformação</h2>
+                    <p class="text-brand-pink font-bold uppercase tracking-wide">Descubra como você também pode criar peças cheias de personalidade</p>
+                </div>
+                
+                <div class="relative pb-[56.25%] h-0 rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+                    <iframe 
+                        class="absolute top-0 left-0 w-full h-full"
+                        src="https://www.youtube.com/embed/OZ6QLWTX6_s" 
+                        title="LUMINA - Curso de Pintura em Taças" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen
+                        loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+            <div class="text-center mt-12">
+                <a href="https://pay.hotmart.com/T104560088A" class="inline-block bg-brand-pink text-white font-black text-lg md:text-xl py-5 px-10 rounded-full hover:scale-105 hover:bg-brand-dark-pink hover:shadow-xl transition-all duration-300 uppercase tracking-widest shadow-lg">
+                    QUERO COMEÇAR HOJE!
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROMISE SECTION (THE COPY) -->
+    <section class="py-20 bg-brand-light-bg relative">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <div class="text-center space-y-8">
+                <h3 class="text-2xl md:text-3xl font-medium text-brand-dark-pink italic leading-relaxed">
+                    "Você já imaginou transformar uma simples taça de vidro… em uma peça elegante, delicada e cheia de personalidade?"
+                </h3>
+
+                <div class="space-y-6 text-gray-700 text-lg md:text-xl leading-relaxed">
+                    <p>Talvez você ame artesanato… Talvez você sempre tenha pensado: <br> <span class="font-bold text-brand-pink">“Eu queria aprender… mas será que eu consigo?”</span></p>
+                    
+                    <p class="font-bold text-brand-dark-pink text-2xl">Deixa eu te dizer uma coisa com carinho: <br> Sim. Você consegue. 💖</p>
+
+                    <p>No Curso Online <span class="font-bold">"Lumina Pintura em Taças"</span>, eu te ensino o passo a passo completo — mesmo que você nunca tenha pintado antes.</p>
+                    
+                    <div class="grid md:grid-cols-3 gap-4 pt-8 pb-8">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-brand-pink">
+                            <span class="font-bold text-brand-pink">Sem complicação</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-brand-pink">
+                            <span class="font-bold text-brand-pink">Sem termos difíceis</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border-l-4 border-brand-pink">
+                            <span class="font-bold text-brand-pink">Sem precisar ter dom</span>
+                        </div>
+                    </div>
+
+                    <p>Eu criei esse curso pensando especialmente em mulheres como nós — que já viveram tanto, que têm sensibilidade, bom gosto e vontade de criar algo com as próprias mãos.</p>
+                </div>
+                <div class="pt-10">
+                    <a href="https://pay.hotmart.com/T104560088A" class="inline-block bg-brand-pink text-white font-black text-lg md:text-xl py-5 px-10 rounded-full hover:scale-105 hover:bg-brand-dark-pink hover:shadow-xl transition-all duration-300 uppercase tracking-widest shadow-lg">
+                        QUERO COMEÇAR AGORA!
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BENEFITS IMAGINE SECTION -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="flex items-center justify-center gap-3 mb-16">
+                <i class="fas fa-sparkles text-brand-pink text-3xl"></i>
+                <h2 class="text-3xl md:text-4xl font-bold text-brand-text uppercase text-center">IMAGINE VOCÊ...</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Benefit 1 -->
+                <div class="bg-brand-light-bg p-8 rounded-2xl shadow-lg border-b-4 border-brand-pink hover:-translate-y-2 transition duration-300">
+                    <div class="text-brand-pink text-4xl mb-6">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <p class="text-brand-dark-pink font-bold text-lg mb-2">MESA POSTA LINDA</p>
+                    <p class="text-gray-600 text-sm">Montar uma mesa linda e sofisticada para receber sua família com todo o carinho.</p>
+                </div>
+
+                <!-- Benefit 2 -->
+                <div class="bg-brand-light-bg p-8 rounded-2xl shadow-lg border-b-4 border-brand-pink hover:-translate-y-2 transition duration-300">
+                    <div class="text-brand-pink text-4xl mb-6">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <p class="text-brand-dark-pink font-bold text-lg mb-2">RECEBER ELOGIOS</p>
+                    <p class="text-gray-600 text-sm">Ser admirada pela sua criatividade e pelas peças exclusivas que você mesma criou.</p>
+                </div>
+
+                <!-- Benefit 3 -->
+                <div class="bg-brand-light-bg p-8 rounded-2xl shadow-lg border-b-4 border-brand-pink hover:-translate-y-2 transition duration-300">
+                    <div class="text-brand-pink text-4xl mb-6">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <p class="text-brand-dark-pink font-bold text-lg mb-2">PRESENTEAR COM AMOR</p>
+                    <p class="text-gray-600 text-sm">Dar presentes únicos, cheios de significado e feitos pelas suas próprias mãos.</p>
+                </div>
+
+                <!-- Benefit 4 -->
+                <div class="bg-brand-light-bg p-8 rounded-2xl shadow-lg border-b-4 border-brand-pink hover:-translate-y-2 transition duration-300">
+                    <div class="text-brand-pink text-4xl mb-6">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <p class="text-brand-dark-pink font-bold text-lg mb-2">RENDA EXTRA</p>
+                    <p class="text-gray-600 text-sm">Começar um novo negócio lucrativo vendendo suas peças para quem valoriza a arte.</p>
+                </div>
+            </div>
+            <div class="text-center mt-12">
+                <a href="https://pay.hotmart.com/T104560088A" class="inline-block bg-brand-pink text-white font-black text-lg md:text-xl py-5 px-10 rounded-full hover:scale-105 hover:bg-brand-dark-pink hover:shadow-xl transition-all duration-300 uppercase tracking-widest shadow-lg">
+                    QUERO COMEÇAR AGORA!
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CURRICULUM SECTION -->
+    <section class="py-20 bg-brand-pink text-white">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-bold uppercase mb-12 text-center">O QUE VOCÊ VAI APRENDER:</h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl">
+                            <i class="fas fa-check-circle text-brand-soft-pink text-2xl"></i>
+                            <span class="font-medium text-lg">Preparação correta da taça</span>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl">
+                            <i class="fas fa-check-circle text-brand-soft-pink text-2xl"></i>
+                            <span class="font-medium text-lg">Técnicas exclusivas de pintura Lumina</span>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl">
+                            <i class="fas fa-check-circle text-brand-soft-pink text-2xl"></i>
+                            <span class="font-medium text-lg">Combinação de cores elegante</span>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl">
+                            <i class="fas fa-check-circle text-brand-soft-pink text-2xl"></i>
+                            <span class="font-medium text-lg">Acabamento profissional</span>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl">
+                            <i class="fas fa-check-circle text-brand-soft-pink text-2xl"></i>
+                            <span class="font-medium text-lg">Como evitar erros comuns</span>
+                        </div>
+                        <div class="flex items-center gap-4 bg-white/10 p-4 rounded-xl">
+                            <i class="fas fa-check-circle text-brand-soft-pink text-2xl"></i>
+                            <span class="font-medium text-lg">Segredos da peça "loja fina"</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-16 bg-white/10 p-8 rounded-3xl text-center border-2 border-dashed border-white/20">
+                    <p class="text-xl md:text-2xl leading-relaxed italic">
+                        "E sabe o que é mais bonito? Não é só sobre pintar taças. <br>
+                        É sobre redescobrir sua criatividade. <br>
+                        É sobre se sentir capaz novamente. <br>
+                        É sobre ter um momento só seu."
+                    </p>
+                </div>
+            </div>
+            <div class="text-center mt-12">
+                <a href="https://pay.hotmart.com/T104560088A" class="inline-block bg-white text-brand-pink font-black text-lg md:text-xl py-5 px-10 rounded-full hover:bg-brand-soft-pink hover:text-white hover:scale-105 transition-all duration-300 uppercase tracking-widest shadow-lg">
+                    QUERO COMEÇAR AGORA!
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS SECTION -->
+    <section class="py-20 bg-brand-light-bg">
+        <div class="container mx-auto px-6 max-w-5xl">
+            <div class="text-center mb-14">
+                <h2 class="text-3xl md:text-4xl font-bold text-brand-text uppercase mb-2">O QUE ALUNAS DIZEM</h2>
+                <p class="text-brand-pink font-medium">Depoimentos reais de quem já transformou sua arte</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Depoimento 1 -->
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 flex flex-col">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-11 h-11 rounded-full bg-gradient-to-br from-brand-pink to-brand-soft-pink flex items-center justify-center text-white font-bold text-sm shrink-0">AC</div>
+                        <div>
+                            <p class="font-bold text-sm text-brand-text">Ana Carolina</p>
+
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 rounded-2xl rounded-tl-sm p-4 flex-1">
+                        <p class="text-sm text-gray-700 leading-relaxed">"Nunca imaginei que conseguiria fazer algo tão lindo! A técnica é super bem explicada e o resultado superou minhas expectativas. Virei a noite pintando!"</p>
+                    </div>
+                    <div class="flex items-center gap-1 mt-3 text-brand-pink text-sm">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                </div>
+
+                <!-- Depoimento 2 -->
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 flex flex-col">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-11 h-11 rounded-full bg-gradient-to-br from-brand-dark-pink to-brand-pink flex items-center justify-center text-white font-bold text-sm shrink-0">ML</div>
+                        <div>
+                            <p class="font-bold text-sm text-brand-text">Maria Luíza</p>
+
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 rounded-2xl rounded-tl-sm p-4 flex-1">
+                        <p class="text-sm text-gray-700 leading-relaxed">"Comprei o curso para fazer uma renda extra e já vendi minhas primeiras 5 taças em uma semana! As clientes amaram. Édina, obrigada por compartilhar esse dom!"</p>
+                    </div>
+                    <div class="flex items-center gap-1 mt-3 text-brand-pink text-sm">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                </div>
+
+                <!-- Depoimento 3 -->
+                <div class="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 flex flex-col">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-11 h-11 rounded-full bg-gradient-to-br from-brand-soft-pink to-brand-accent flex items-center justify-center text-white font-bold text-sm shrink-0">CR</div>
+                        <div>
+                            <p class="font-bold text-sm text-brand-text">Cristina Ribeiro</p>
+
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 rounded-2xl rounded-tl-sm p-4 flex-1">
+                        <p class="text-sm text-gray-700 leading-relaxed">"Sempre achei que não tinha talento para pintura. A Edina ensina de um jeito tão simples e acolhedor que qualquer pessoa consegue. Já até presenteei minhas amigas!"</p>
+                    </div>
+                    <div class="flex items-center gap-1 mt-3 text-brand-pink text-sm">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-12">
+                <a href="https://pay.hotmart.com/T104560088A" class="inline-block bg-brand-pink text-white font-black text-lg md:text-xl py-5 px-10 rounded-full hover:scale-105 hover:bg-brand-dark-pink hover:shadow-xl transition-all duration-300 uppercase tracking-widest shadow-lg">
+                    QUERO APRENDER TAMBÉM!
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- AUTHOR SECTION -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6">
+                <h2 class="text-3xl md:text-5xl font-bold text-brand-text uppercase leading-tight">
+                    QUEM É A SUA PROFESSORA, <br> <span class="text-brand-pink">ÉDINA COSER?</span>
+                </h2>
+                
+                <h3 class="text-xl font-medium text-gray-500 italic">
+                    "Edina, eu achei que não conseguiria… e hoje eu estou apaixonada pelo que faço."
+                </h3>
+
+                <p class="text-gray-600 leading-relaxed">
+                    Sou artista de coração e apaixonada pela delicadeza que a arte proporciona. Minha missão é ajudar mulheres a redescobrirem sua capacidade de criar peças extraordinárias.
+                </p>
+                
+                <p class="text-gray-600 leading-relaxed">
+                    No curso <span class="text-brand-pink font-bold">LUMINA</span>, compartilho técnicas que desenvolvi para transformar o simples em luxuoso, guiando você passo a passo nessa jornada de arte e bem-estar.
+                </p>
+                <div>
+                    <a href="https://pay.hotmart.com/T104560088A" class="inline-block bg-brand-pink text-white font-black text-lg md:text-xl py-5 px-10 rounded-full hover:scale-105 hover:bg-brand-dark-pink hover:shadow-xl transition-all duration-300 uppercase tracking-widest shadow-lg">
+                        QUERO APRENDER COM A ÉDINA
+                    </a>
+                </div>
+            </div>
+
+            <div class="relative flex justify-center">
+                 <div class="w-full max-w-md bg-gray-100 rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+                    <img src="./foto-autora.png" alt="Édina Coser" class="w-full object-cover">
+                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OFFER SECTION -->
+    <section id="offer" class="py-20 relative bg-brand-light-bg">
+        <div class="container mx-auto px-6">
+            <div class="max-w-5xl mx-auto bg-white rounded-3xl overflow-hidden shadow-2xl border border-gray-100 flex flex-col md:flex-row min-h-[500px]">
+                
+                <!-- Left Side (Pink) -->
+                <div class="md:w-1/2 p-12 flex flex-col justify-center bg-brand-pink text-white relative overflow-hidden">
+                    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23ffffff\' fill-rule=\'evenodd\'%3E%3Ccircle cx=\'3\' cy=\'3\' r=\'3\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'3\'/%3E%3C/g%3E%3C/svg%3E');"></div>
+                    
+                    <i class="fas fa-wine-glass-alt text-4xl mb-6 text-white opacity-50"></i>
+                    <h2 class="text-4xl md:text-5xl font-black uppercase leading-tight drop-shadow-md">
+                        TRANSFORME <br> VIDRO EM <br> <span class="bg-white px-2 text-brand-pink">ARTE</span> <br> COM AMOR!
+                    </h2>
+                    <p class="mt-6 text-lg font-medium text-pink-100">Aproveite o valor promocional por tempo limitado.</p>
+                </div>
+
+                <!-- Right Side (Offer Details) -->
+                <div class="md:w-1/2 bg-gray-50 p-12 flex flex-col justify-center items-center text-center relative">
+                    <p class="text-brand-pink text-sm uppercase tracking-widest mb-2 font-bold">VALOR PROMOCIONAL</p>
+                    <p class="text-gray-400 line-through text-lg">De R$ 657,00</p>
+                    <p class="text-brand-dark-pink font-bold text-xl uppercase mb-4">Por apenas:</p>
+                    <h3 class="text-6xl md:text-7xl font-black text-brand-text mb-2">12x de R$ 48,42</h3>
+                    <p class="text-gray-500 mb-8 font-medium">ou à vista por <span class="text-brand-pink font-bold">R$ 497,00</span></p>
+
+                    <a href="https://pay.hotmart.com/T104560088A" class="bg-brand-pink text-white font-black text-lg md:text-xl py-4 px-6 md:px-10 rounded-full hover:scale-105 hover:bg-brand-dark-pink hover:shadow-xl transition-all duration-300 w-full md:w-auto uppercase shadow-lg text-center">
+                        QUERO MINHA VAGA AGORA!
+                    </a>
+
+                    <div class="flex gap-4 mt-8 text-gray-300 text-2xl justify-center">
+                        <i class="fab fa-cc-visa"></i>
+                        <i class="fab fa-cc-mastercard"></i>
+                        <i class="fas fa-barcode"></i>
+                        <i class="fab fa-pix"></i>
+                    </div>
+                     <p class="mt-4 text-xs text-gray-400 flex items-center gap-1 justify-center">
+                        <i class="fas fa-lock"></i> Compra 100% Segura pela Hotmart
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6 grid md:grid-cols-3 gap-12">
+            <div class="col-span-1">
+                 <div class="flex items-start gap-2">
+                    <i class="fas fa-question-circle text-brand-pink text-3xl mt-1"></i>
+                    <h2 class="text-4xl font-bold text-brand-text uppercase leading-tight">
+                        AINDA TEM <br> DÚVIDAS?
+                    </h2>
+                </div>
+                <p class="mt-4 text-gray-500">Separamos as perguntas mais comuns para te ajudar a decidir.</p>
+            </div>
+
+            <div class="col-span-2 space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="bg-brand-light-bg rounded-xl overflow-hidden border border-brand-pink/10">
+                    <button class="w-full text-left px-6 py-4 flex justify-between items-center text-brand-text font-bold hover:bg-white transition" onclick="toggleFaq(this)">
+                        PRECISO SABER DESENHAR?
+                        <i class="fas fa-chevron-down text-brand-pink transition-transform"></i>
+                    </button>
+                    <div class="hidden px-6 py-4 text-gray-600 border-t border-brand-pink/10 bg-white text-sm leading-relaxed">
+                        Não! O curso é pensado para quem nunca pegou em um pincel. A técnica Lumina permite criar peças lindas com traços simples e orientados, sem exigir habilidades prévias de desenho.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="bg-brand-light-bg rounded-xl overflow-hidden border border-brand-pink/10">
+                    <button class="w-full text-left px-6 py-4 flex justify-between items-center text-brand-text font-bold hover:bg-white transition" onclick="toggleFaq(this)">
+                        POR QUANTO TEMPO TEREI ACESSO?
+                        <i class="fas fa-chevron-down text-brand-pink transition-transform"></i>
+                    </button>
+                    <div class="hidden px-6 py-4 text-gray-600 border-t border-brand-pink/10 bg-white text-sm leading-relaxed">
+                        O acesso ao curso é vitalício! Você poderá assistir às aulas no seu tempo, quantas vezes quiser, e revisitar o conteúdo sempre que bater aquela dúvida.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="bg-brand-light-bg rounded-xl overflow-hidden border border-brand-pink/10">
+                    <button class="w-full text-left px-6 py-4 flex justify-between items-center text-brand-text font-bold hover:bg-white transition" onclick="toggleFaq(this)">
+                        COMO FUNCIONA O ACESSO?
+                        <i class="fas fa-chevron-down text-brand-pink transition-transform"></i>
+                    </button>
+                    <div class="hidden px-6 py-4 text-gray-600 border-t border-brand-pink/10 bg-white text-sm leading-relaxed">
+                        O acesso é imediato após a confirmação do pagamento. Você receberá os dados de login por e-mail e poderá assistir às aulas no seu tempo, pelo celular, tablet ou computador.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 4 -->
+                <div class="bg-brand-light-bg rounded-xl overflow-hidden border border-brand-pink/10">
+                    <button class="w-full text-left px-6 py-4 flex justify-between items-center text-brand-text font-bold hover:bg-white transition" onclick="toggleFaq(this)">
+                        COMO FUNCIONA A GARANTIA?
+                        <i class="fas fa-chevron-down text-brand-pink transition-transform"></i>
+                    </button>
+                    <div class="hidden px-6 py-4 text-gray-600 border-t border-brand-pink/10 bg-white text-sm leading-relaxed">
+                        Você tem 7 dias de garantia incondicional. Se por qualquer motivo achar que o curso não é para você, basta solicitar o reembolso e devolvemos 100% do seu investimento.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="bg-brand-light-bg rounded-xl overflow-hidden border border-brand-pink/10">
+                    <button class="w-full text-left px-6 py-4 flex justify-between items-center text-brand-text font-bold hover:bg-white transition" onclick="toggleFaq(this)">
+                        PRECISO DE UM FORNO PROFISSIONAL?
+                        <i class="fas fa-chevron-down text-brand-pink transition-transform"></i>
+                    </button>
+                    <div class="hidden px-6 py-4 text-gray-600 border-t border-brand-pink/10 bg-white text-sm leading-relaxed">
+                        Não! Você pode fazer a queima (fixação da tinta) usando o forno convencional (a gás ou elétrico) da sua cozinha, a 160°C.
+                    </div>
+                </div>
+
+                <!-- FAQ Item 6 -->
+                <div class="bg-brand-light-bg rounded-xl overflow-hidden border border-brand-pink/10">
+                    <button class="w-full text-left px-6 py-4 flex justify-between items-center text-brand-text font-bold hover:bg-white transition" onclick="toggleFaq(this)">
+                        QUAIS MATERIAIS VOU PRECISAR?
+                        <i class="fas fa-chevron-down text-brand-pink transition-transform"></i>
+                    </button>
+                    <div class="hidden px-6 py-4 text-gray-600 border-t border-brand-pink/10 bg-white text-sm leading-relaxed">
+                        Basicamente peças de vidro (taças, copos) e as tintas ou canetas específicas para pintura em vidro que indicamos no curso. São materiais fáceis de encontrar e muito acessíveis.
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-12 col-span-1 md:col-span-3">
+                <a href="https://pay.hotmart.com/T104560088A" class="inline-block bg-brand-pink text-white font-black text-lg md:text-xl py-5 px-10 rounded-full hover:scale-105 hover:bg-brand-dark-pink hover:shadow-xl transition-all duration-300 uppercase tracking-widest shadow-lg">
+                    QUERO COMEÇAR AGORA!
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- LEAD CAPTURE SECTION -->
+    <section class="py-20 bg-brand-light-bg">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
+                <div class="md:flex">
+                    <div class="md:w-1/2 bg-brand-pink p-10 text-white flex flex-col justify-center relative overflow-hidden">
+                        <div class="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-white opacity-10 rounded-full blur-2xl"></div>
+                        <h2 class="text-3xl font-bold uppercase mb-4 relative z-10">Fique por dentro das novidades!</h2>
+                        <p class="text-pink-50 mb-8 relative z-10 text-sm leading-relaxed">Cadastre-se para receber conteúdos gratuitos, novidades e ofertas exclusivas sobre a Família Lumina.</p>
+                    </div>
+                    <div class="md:w-1/2 p-10">
+                        <form action="https://formsubmit.co/edinacoser@gmail.com" method="POST" class="space-y-4">
+                            <input type="hidden" name="_next" value="https://pinturatacas.edinacoser.com.br/obrigado.html">
+                            <input type="hidden" name="_subject" value="Novo Lead: Lumina Pintura em Taças">
+                            <input type="hidden" name="_captcha" value="false">
+
+                            <div>
+                                <label class="block text-gray-400 text-xs font-bold mb-2 uppercase" for="name">Nome</label>
+                                <input class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-100 focus:border-brand-pink focus:outline-none transition" type="text" id="name" name="name" placeholder="Seu nome" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-xs font-bold mb-2 uppercase" for="email">E-mail</label>
+                                <input class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-100 focus:border-brand-pink focus:outline-none transition" type="email" id="email" name="email" placeholder="Seu melhor e-mail" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-400 text-xs font-bold mb-2 uppercase" for="celular">Celular</label>
+                                <input class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-100 focus:border-brand-pink focus:outline-none transition" type="tel" id="celular" name="celular" placeholder="(XX) XXXXX-XXXX" maxlength="15" oninput="mascaraCelular(this)">
+                            </div>
+                            <button type="submit" class="w-full bg-brand-pink text-white font-bold py-4 rounded-lg hover:bg-brand-dark-pink transition uppercase tracking-wide">
+                                Quero me Cadastrar
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-white py-12 border-t border-gray-100">
+        <div class="container mx-auto px-6 text-center">
+            <p class="text-gray-400 text-sm">&copy; 2026 Édina Coser - Lumina Pintura em Taças. Todos os direitos reservados.</p>
+            <div class="mt-8 flex flex-col items-center gap-2 opacity-50">
+                <a href="https://manabyte.com.br" target="_blank" class="flex items-center gap-2 text-xs hover:text-brand-pink transition font-semibold tracking-wide">
+                    Feito com <i class="fas fa-heart text-brand-pink"></i> por MANABYTE
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFaq(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('i');
+            content.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        }
+
+        function mascaraCelular(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            if (value.length > 6) {
+                value = '(' + value.slice(0, 2) + ') ' + value.slice(2, 7) + '-' + value.slice(7);
+            } else if (value.length > 2) {
+                value = '(' + value.slice(0, 2) + ') ' + value.slice(2);
+            } else if (value.length > 0) {
+                value = '(' + value;
+            }
+            input.value = value;
+        }
+    </script>
+</body>
+</html>

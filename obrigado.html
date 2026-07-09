@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obrigado! - Família Lumina</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Rubik+Dirt&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-pink': '#D53369',
+                        'brand-dark-pink': '#8A2E54',
+                        'brand-soft-pink': '#FF91B1',
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        dirt: ['"Rubik Dirt"', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#FFF5F8] min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-2xl w-full bg-white rounded-3xl shadow-2xl overflow-hidden text-center p-12 border-t-8 border-brand-pink">
+        <div class="text-brand-pink text-7xl mb-6">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h1 class="text-3xl md:text-4xl font-black text-gray-800 uppercase mb-4">Cadastro Realizado!</h1>
+        <p class="text-gray-600 text-lg mb-8">Obrigada por se interessar pelo curso de <strong>Pintura em Taças</strong>. Em breve você receberá novidades e ofertas exclusivas no seu e-mail!</p>
+        
+        <div class="space-y-4">
+            <p class="text-sm text-gray-400 uppercase font-bold tracking-widest">Enquanto isso...</p>
+            <a href="index.html" class="inline-block bg-brand-pink text-white font-bold py-4 px-8 rounded-full hover:bg-brand-dark-pink transition-all duration-300 uppercase shadow-lg">
+                Voltar para a Página Inicial
+            </a>
+        </div>
+        
+        <div class="mt-12 pt-8 border-t border-gray-100 flex justify-center gap-6 text-2xl text-brand-pink">
+             <a href="#" class="hover:scale-110 transition"><i class="fab fa-instagram"></i></a>
+             <a href="#" class="hover:scale-110 transition"><i class="fab fa-whatsapp"></i></a>
+             <a href="#" class="hover:scale-110 transition"><i class="fab fa-youtube"></i></a>
+        </div>
+    </div>
+</body>
+</html>
